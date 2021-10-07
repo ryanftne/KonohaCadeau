@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : mer. 06 oct. 2021 à 14:29
+-- Généré le : jeu. 07 oct. 2021 à 10:16
 -- Version du serveur :  5.7.32
 -- Version de PHP : 7.4.12
 
@@ -81,7 +81,10 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20211006095117', '2021-10-06 09:51:19', 98),
 ('DoctrineMigrations\\Version20211006101830', '2021-10-06 10:18:33', 141),
 ('DoctrineMigrations\\Version20211006102314', '2021-10-06 10:23:17', 117),
-('DoctrineMigrations\\Version20211006104652', '2021-10-06 10:46:56', 75);
+('DoctrineMigrations\\Version20211006104652', '2021-10-06 10:46:56', 75),
+('DoctrineMigrations\\Version20211007080611', '2021-10-07 08:06:17', 137),
+('DoctrineMigrations\\Version20211007081122', '2021-10-07 08:11:26', 50),
+('DoctrineMigrations\\Version20211007093901', '2021-10-07 09:39:05', 104);
 
 -- --------------------------------------------------------
 
@@ -147,6 +150,18 @@ INSERT INTO `order_product` (`order_id`, `product_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `password_recovery`
+--
+
+CREATE TABLE `password_recovery` (
+  `id` int(11) NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `product`
 --
 
@@ -176,20 +191,22 @@ INSERT INTO `product` (`id`, `name`, `image`, `price`, `description`, `category`
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `email` varchar(180) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `roles` json NOT NULL,
+  `roles` json DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `city` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `postal_code` int(11) DEFAULT NULL
+  `postal_code` int(11) DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `firstname` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`id`, `email`, `roles`, `password`, `address`, `city`, `postal_code`) VALUES
-(1, 'antoinevasone@outlook.com', '[\"ROLE_ADMIN\"]', 'Guizmo', '21 quai de l\'ourcq', 'Pantin', 93500),
-(2, 'thomasyalap@outlook.com', '[\"ROLE_USER\"]', 'Pioute', '2 allée des Tulipes', 'Sevran', 93270);
+INSERT INTO `user` (`id`, `email`, `roles`, `password`, `address`, `city`, `postal_code`, `name`, `firstname`) VALUES
+(1, 'antoinevasone@outlook.com', '[\"ROLE_ADMIN\"]', 'Guizmo', '21 quai de l\'ourcq', 'Pantin', 93500, 'Diddi', 'Trix'),
+(2, 'thomasyalap@outlook.com', '[\"ROLE_USER\"]', 'Pioute', '2 allée des Tulipes', 'Sevran', 93270, 'Gambino', 'Alicante');
 
 --
 -- Index pour les tables déchargées
@@ -239,6 +256,12 @@ ALTER TABLE `order_product`
   ADD KEY `IDX_2530ADE64584665A` (`product_id`);
 
 --
+-- Index pour la table `password_recovery`
+--
+ALTER TABLE `password_recovery`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Index pour la table `product`
 --
 ALTER TABLE `product`
@@ -272,6 +295,12 @@ ALTER TABLE `etat`
 --
 ALTER TABLE `order`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT pour la table `password_recovery`
+--
+ALTER TABLE `password_recovery`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `product`
